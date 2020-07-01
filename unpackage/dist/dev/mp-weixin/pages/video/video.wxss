@@ -1,0 +1,227 @@
+
+view,
+swiper-item,
+scroll-view {
+  display:-webkit-box;
+  display:-webkit-flex;
+  display:flex;
+  -webkit-box-orient:vertical;
+  -webkit-box-direction:normal;
+  -webkit-flex-direction:column;
+          flex-direction:column;
+  -webkit-flex-shrink: 0;
+          flex-shrink: 0;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+          flex-grow: 0;
+  -webkit-flex-basis: auto;
+          flex-basis: auto;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+          align-items: stretch;
+  -webkit-align-content: flex-start;
+          align-content: flex-start;
+}
+view,
+image,
+input,
+scroll-view,
+swiper,
+swiper-item,
+text,
+textarea,
+video {
+  position: relative;
+  border: 0px solid #000000;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+swiper-item {
+  position: absolute;
+}
+
+
+.shop-item.data-v-14c45286 {
+		position: fixed;
+		bottom: 35px;
+		left: 15px;
+		width: 500rpx;
+		background-color: #ffffff;
+		padding: 10px;
+
+		display: -webkit-box;
+		display: -webkit-flex;
+		display: flex;
+		width: 65%;
+
+		border-radius: 5px;
+		overflow: hidden;
+		z-index: 991;
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		-webkit-flex-direction: row;
+		        flex-direction: row;
+}
+.shopItem-pic.data-v-14c45286 {
+		width: 60px;
+		height: 60px;
+}
+.shopItem-con.data-v-14c45286 {
+		-webkit-box-flex: 1;
+		-webkit-flex: 1;
+		        flex: 1;
+		margin-left: 5px;
+}
+.shopItem-title.data-v-14c45286 {
+		font-size: 14px;
+		color: #323232;
+
+		white-space: nowrap;
+
+		text-overflow: ellipsis;
+		overflow: hidden;
+		lines:1;
+}
+.shopItem-txt.data-v-14c45286 {
+		font-size: 10px;
+		color: #cccccc;
+		margin: 6px 0;
+}
+.shopItem-price.data-v-14c45286 {
+		font-size: 10px;
+		color: #b81c22;
+}
+.cover-view-top.data-v-14c45286 {
+		position: fixed;
+		top: 25px;
+		left: 10px;
+		z-index: 999;
+		height: 32px;
+		width: 32px;
+}
+.swiper.data-v-14c45286{
+		-webkit-box-flex: 1;
+		-webkit-flex: 1;
+		        flex: 1;  
+		background-color: #000;
+}
+.swiper-item.data-v-14c45286 {
+	    -webkit-box-flex: 1;
+	    -webkit-flex: 1;
+	            flex: 1;
+}
+.video.data-v-14c45286 {
+		-webkit-box-flex: 1;
+		-webkit-flex: 1;
+		        flex: 1;
+}
+.video-box.data-v-14c45286{
+		-webkit-box-flex: 1;
+		-webkit-flex: 1;
+		        flex: 1;
+}
+.cover-view-center.data-v-14c45286{
+		position: absolute;
+		-webkit-box-pack: center;
+		-webkit-justify-content: center;
+		        justify-content: center;
+		-webkit-box-align: center;
+		-webkit-align-items: center;
+		        align-items: center;
+		opacity: 0.1;
+		z-index: 999;
+}
+.cover-view-left.data-v-14c45286{
+		position: absolute;
+		margin-left: 10rpx;
+		width: 500rpx;
+		bottom: 120rpx;
+		z-index: 9999;
+		font-size: 16px;
+		color: #FFFFFF;
+
+		white-space: pre-wrap;
+		text-overflow:ellipsis;
+		overflow:hidden;
+}
+.left-view.data-v-14c45286{
+		margin-bottom: 20rpx;
+}
+.left-text.data-v-14c45286{
+		font-size: 16px;
+		color: #FFFFFF;
+}
+.avater.data-v-14c45286{
+		border-radius: 50rpx;
+		border-color: #fff;
+		border-style: solid;
+		border-width: 2px;
+}
+.cover-view-right.data-v-14c45286{
+		position: absolute;
+		bottom: 160rpx;
+		right: 20rpx;
+
+		display: -webkit-box;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-webkit-flex-direction: column;
+		        flex-direction: column;
+
+		z-index: 9999;
+}
+.right-text-avater.data-v-14c45286{
+		position: absolute;
+		font-size: 14px;
+		top: 80rpx;
+		left: 30rpx;
+		height: 40rpx;
+		width: 40rpx;
+		background-color: #DD524D;
+		color: #FFFFFF;
+		border-radius: 50%;
+		text-align: center;
+		line-height: 40rpx;
+		z-index: 999;
+}
+.avater-icon.data-v-14c45286{
+		height: 40rpx;
+		width: 40rpx;
+		
+		color: #fff;
+		background-color: #DD524D;
+		border-radius: 50%;
+		position: absolute;
+		left: 30rpx;
+		top:-20rpx;
+}
+.right-text.data-v-14c45286{
+		text-align: center;
+		font-size: 14px;
+		color: #FFFFFF;
+		margin-bottom: 50rpx;
+		height: 20px;
+}
+.img.data-v-14c45286{
+		height: 100rpx;
+		width: 100rpx;
+		opacity: 0.9;
+}
+.page.data-v-14c45286{
+
+		display: -webkit-box;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-webkit-flex-direction: column;
+		        flex-direction: column;
+
+		-webkit-box-flex: 1;
+		-webkit-flex: 1;
+		        flex: 1;
+}
+	
+

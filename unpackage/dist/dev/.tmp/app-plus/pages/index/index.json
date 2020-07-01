@@ -1,0 +1,6 @@
+{
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "mix-load-more": "/components/mix-load-more/mix-load-more"
+  }
+}

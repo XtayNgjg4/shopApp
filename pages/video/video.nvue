@@ -1,0 +1,416 @@
+<template>
+    <div class="page" :style="{ height: height }">
+		<swiper
+			class="swiper"
+			:vertical="true"
+			@change="changeCurrent"
+			:current="index">
+			<swiper-item v-for="(item, idx) in videoList" :key="idx" class="swiper-item">
+					
+					<div v-if="Math.abs(index-idx)<=1" class="video-box">
+						<chunlei-video class="video" :src="item.src"  :height="height" :width="width" 
+							:play="item.flag" v-if="Math.abs(index-idx)<=1" :gDuration="item.duration"
+							:initialTime="item.initialTime" @pause="pauseVideo" :objectFit="item.objectFit"
+						>
+						</chunlei-video>
+						<cover-image src="../../static/video/vback.png" class="cover-view-top" @click.stop="back()"></cover-image>
+						<cover-view class="cover-view-left">
+							<cover-view class="left-view">
+								<!-- #ifdef APP-PLUS-NVUE -->
+								<view class="shop-item">
+									<image
+										src="https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcpos/1100001834/2019/0815/86/09242234-5364-4ff4-b07a-79a0ea8c63e4.jpg"
+										class="shopItem-pic"
+									></image>
+									<view class="shopItem-con">
+										<view >
+										<text class="shopItem-title">{{item.content}}</text> 
+										</view>
+										<view >
+											<text class="shopItem-txt">已售999笔</text>
+										</view>
+										<view >
+											<text class="shopItem-price">￥998</text>
+										</view>
+										<view class="goshop-btn"></view>
+									</view>
+								</view>
+								<!-- #endif -->
+								<!-- #ifndef APP-PLUS-NVUE -->
+								<cover-view class="left-text">
+									<cover-view class="shop-item">
+										<cover-image
+											src="https://h2.appsimg.com/a.appsimg.com/upload/merchandise/pdcpos/1100001834/2019/0815/86/09242234-5364-4ff4-b07a-79a0ea8c63e4.jpg"
+											class="shopItem-pic"
+										></cover-image>
+										<cover-view class="shopItem-con">
+											<cover-view class="shopItem-title">
+											{{item.content}}
+											</cover-view>
+											<cover-view class="shopItem-txt">
+												已售999笔
+											</cover-view>
+											<cover-view class="shopItem-price">
+												￥998
+											</cover-view>
+											<cover-view class="goshop-btn"></cover-view>
+										</cover-view>
+									</cover-view>
+								</cover-view>
+								<!-- #endif -->
+							</cover-view>
+						</cover-view>
+						<cover-view class="cover-view-right">
+						<!-- 	<cover-image :src="item.avater" class="avater img" @click.stop="tapAvater"></cover-image>
+							!-- #ifdef APP-PLUS-NVUE --
+							<text class="right-text-avater">+</text>
+							<text class="right-text"></text>
+							!-- #endif --
+							!-- #ifndef APP-PLUS-NVUE --
+							<cover-view class="right-text-avater">+</cover-view>
+							<cover-view class="right-text"></cover-view>
+							!-- #endif -- -->
+							
+							<cover-image src="../../static/video/vidx.png" class="img" @click.stop="tapLove"></cover-image>
+							
+							<!-- #ifdef APP-PLUS-NVUE -->
+							<text class="right-text">{{item.like}}</text>
+							<!-- #endif -->
+							<!-- #ifndef APP-PLUS-NVUE -->
+							<cover-view class="right-text">{{item.like}}</cover-view>
+							<!-- #endif -->
+							
+							<cover-image src="../../static/video/vcar.png" class="img" @click.stop="tapMsg(item)"></cover-image>
+							
+							<!-- #ifdef APP-PLUS-NVUE -->
+							<text class="right-text">{{item.comment}}</text>
+							<!-- #endif -->
+							<!-- #ifndef APP-PLUS-NVUE -->
+							<cover-view class="right-text">{{item.comment}}</cover-view>
+							<!-- #endif -->
+							
+							<cover-image src="../../static/video/vzf.png" class="img" @click.stop="tapShare"></cover-image>
+							
+							<!-- #ifdef APP-PLUS-NVUE -->
+							<text class="right-text">分享</text>
+							<!-- #endif -->
+							<!-- #ifndef APP-PLUS-NVUE -->
+							<cover-view class="right-text">分享</cover-view>
+							<!-- #endif -->
+							
+						</cover-view>
+					</div>
+				
+			</swiper-item>
+		</swiper>
+    </div>
+</template>
+<script>
+	import chunleiVideo from '../../components/chunlei-video/chunlei-video'
+    export default { 
+		components:{
+			chunleiVideo
+		},
+        data() {
+            return {
+				sysheight:0,
+				playCount:2,//剩余多少视频加载视频列表
+				videoList:[
+					
+				],
+				height:'667px',
+				index:0,
+				width:'',
+				oldIndex:0
+			}
+        },
+		created(){
+			//#ifdef APP-PLUS
+			plus.screen.lockOrientation("portrait-primary")
+			//隐藏subnvue
+			uni.getSubNVueById('comment').hide()
+			uni.getSubNVueById('input-box').hide()
+			//#endif
+			this.sysheight = uni.getSystemInfoSync().windowHeight
+			this.height = `${this.sysheight}px` 
+			let width = uni.getSystemInfoSync().windowWidth 
+			this.width = `${width}px` 
+			this.videoList.length = 300
+			this.videoList.fill({src:''})
+			
+		
+			
+		},
+		async mounted() {
+		
+			await this.pushVideoList()
+			this.videoPlay(this.index)
+		},
+		onHide(){
+			for (let item of this.videoList) {
+				item.flag = false
+			}
+		},
+        methods: {
+			back() {
+				uni.navigateBack({});
+			},
+			changeCurrent(e){
+				this.index = e.detail.current;
+				for (let item of this.videoList) {
+					item.flag = false
+				}
+				this.videoList[this.index].flag = !this.videoList[this.index].flag
+			},
+			pushVideoList(){
+				let promise = new Promise((resolve,reject)=>{
+					uni.request({
+						url: 'https://api.apiopen.top/videoRecommend?id=127397',
+						success: (res) => {
+							let videoGroup = []
+							for (let item of res.data.result) {
+								if(item.type == 'videoSmallCard'){
+									videoGroup.push({
+										src:item.data.playUrl,
+										content:item.data.title,
+										flag:false,
+										check:false,
+										like:'7w',
+										comment:'1045',
+										at:item.data.author.name,
+										avater:item.data.author.icon,
+										initialTime:0,
+										duration:item.data.duration
+									})
+								}
+							}
+							
+							let len = this.videoList.filter(item=>item.src).length
+							for(let i = len;i<len+videoGroup.length;i++){
+								this.$set(this.videoList,i,videoGroup[i-len])
+								
+							}
+							resolve()
+						}
+					})
+				}) 
+				return promise
+			},
+			tapLove(){
+				this.videoList[this.index].check = !this.videoList[this.index].check
+				this.videoList = [...this.videoList]
+				
+			},
+			tapAvater(){
+				uni.showToast({
+					icon:'none',
+					title:`点击索引为${this.index}的头像`
+				})
+			},
+			tapMsg(item){
+				//#ifndef APP-NVUE
+				uni.showToast({
+					icon:'none',
+					title:`查看索引为${this.index}的评论`
+				})
+				//#endif
+				//#ifdef APP-NVUE
+				uni.getSubNVueById('comment').show('none',0,()=>{
+					uni.$emit('showComment',item.content)
+				});
+				//#endif
+			},
+			tapShare(){
+				uni.showToast({
+					icon:'none',
+					title:`分享索引为${this.index}的视频`
+				})
+			},
+			videoPlay(index){
+				let promise = new Promise((resolve,reject)=>{
+					resolve()
+				})
+				promise.then(res=>{
+					this.$set(this.videoList[index],'flag',!this.videoList[index].flag)
+		
+				})
+			},
+			pauseVideo(val){
+				if(typeof this.videoList[this.oldIndex].initialTime !='undefined') this.videoList[this.oldIndex].initialTime = val
+			},
+			clickVideo(){
+				this.videoList[this.index].flag = !this.videoList[this.index].flag
+			}
+        },
+		watch:{
+			index(newVal,oldVal){
+				let len = this.videoList.filter(item=>item.src).length
+				//加载视频
+				if(len - this.index - 1 <= this.playCount){
+					this.pushVideoList()
+				}
+				this.oldIndex = oldVal
+			}
+		}
+    }
+</script>
+<style scoped>
+	.shop-item {
+		position: fixed;
+		bottom: 35px;
+		left: 15px;
+		width: 500upx;
+		background-color: #ffffff;
+		padding: 10px;
+		//#ifndef APP-PLUS-NVUE
+		display: flex;
+		width: 65%;
+		//#endif
+		border-radius: 5px;
+		overflow: hidden;
+		z-index: 991;
+		flex-direction: row;
+	}
+	.shopItem-pic {
+		width: 60px;
+		height: 60px;
+	}
+	.shopItem-con {
+		flex: 1;
+		margin-left: 5px;
+	}
+	.shopItem-title {
+		font-size: 14px;
+		color: #323232;
+		//#ifndef APP-PLUS-NVUE
+		white-space: nowrap;
+		//#endif
+		text-overflow: ellipsis;
+		overflow: hidden;
+		lines:1;
+	}
+	.shopItem-txt {
+		font-size: 10px;
+		color: #cccccc;
+		margin: 6px 0;
+	}
+	.shopItem-price {
+		font-size: 10px;
+		color: #b81c22;
+	}
+	
+	.cover-view-top {
+		position: fixed;
+		top: 25px;
+		left: 10px;
+		z-index: 999;
+		height: 32px;
+		width: 32px;
+	}
+	
+	.swiper{
+		flex: 1;  
+		background-color: #000;
+	}
+	.swiper-item {
+	    flex: 1;
+	}
+    .video {
+		flex: 1;
+    }
+	.video-box{
+		flex: 1;
+	}
+	.cover-view-center{
+		position: absolute;
+		justify-content: center;
+		align-items: center;
+		opacity: 0.1;
+		z-index: 999;
+	}
+	.cover-view-left{
+		position: absolute;
+		margin-left: 10upx;
+		width: 500upx;
+		bottom: 120upx;
+		z-index: 9999;
+		font-size: 16px;
+		color: #FFFFFF;
+		/* #ifndef APP-PLUS */
+		white-space: pre-wrap;
+		text-overflow:ellipsis;
+		overflow:hidden;
+		/* #endif */
+	}
+	.left-view{
+		margin-bottom: 20upx;
+	}
+	.left-text{
+		font-size: 16px;
+		color: #FFFFFF;
+	}
+	.avater{
+		border-radius: 50upx;
+		border-color: #fff;
+		border-style: solid;
+		border-width: 2px;
+	}
+	
+	.cover-view-right{
+		position: absolute;
+		bottom: 160upx;
+		right: 20upx;
+		/* #ifndef APP-PLUS-NVUE */
+		display: flex;
+		flex-direction: column;
+		/* #endif */
+		z-index: 9999;
+	}
+	
+	.right-text-avater{
+		position: absolute;
+		font-size: 14px;
+		top: 80upx;
+		left: 30upx;
+		height: 40upx;
+		width: 40upx;
+		background-color: #DD524D;
+		color: #FFFFFF;
+		border-radius: 50%;
+		text-align: center;
+		line-height: 40upx;
+		z-index: 999;
+	}
+	.avater-icon{
+		height: 40upx;
+		width: 40upx;
+		
+		color: #fff;
+		background-color: #DD524D;
+		border-radius: 50%;
+		position: absolute;
+		left: 30upx;
+		top:-20upx;
+	}
+	
+	.right-text{
+		text-align: center;
+		font-size: 14px;
+		color: #FFFFFF;
+		margin-bottom: 50upx;
+		height: 20px;
+	}
+	.img{
+		height: 100upx;
+		width: 100upx;
+		opacity: 0.9;
+	}
+	.page{
+		/* #ifndef APP-PLUS-NVUE */
+		display: flex;
+		flex-direction: column;
+		/* #endif */
+		flex: 1; 
+	}
+	
+</style>
